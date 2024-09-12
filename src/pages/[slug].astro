@@ -12,10 +12,10 @@ export interface Props {
 
 export async function getStaticPaths() {
   const data = await getAllPosts();
-  const posts = data.publication.posts.edges;
+  const posts = data.publication.posts.edges.map(post => post.node);
   const postResult = posts.map(post => ({
-    params: { slug: post.node.slug },
-    props: { post: post.node },
+    params: { slug: post.slug },
+    props: { post: post },
   }));
 
   const pagePaths = getPageNumbers(posts.length).map(pageNum => ({
