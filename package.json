@@ -19,6 +19,8 @@
     "@resvg/resvg-js": "^2.6.2",
     "astro": "^4.15.4",
     "fuse.js": "^7.0.0",
+    "graphql-request": "^7.1.0",
+    "highlight.js": "^11.10.0",
     "lodash.kebabcase": "^4.1.1",
     "remark-collapse": "^0.1.2",
     "remark-toc": "^9.0.0",

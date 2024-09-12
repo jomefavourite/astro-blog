@@ -4,13 +4,13 @@ import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import Tag from "@components/Tag.astro";
 import Datetime from "@components/Datetime";
-import type { CollectionEntry } from "astro:content";
 import { slugifyStr } from "@utils/slugify";
 import ShareLinks from "@components/ShareLinks.astro";
 import { SITE } from "@config";
+import type {Post} from "lib/schema";
 
 export interface Props {
-  post: CollectionEntry<"blog">;
+  post: Post;
 }
 
 const { post } = Astro.props;
@@ -18,29 +18,29 @@ const { post } = Astro.props;
 const {
   title,
   author,
-  description,
-  ogImage,
-  canonicalURL,
-  pubDatetime,
-  modDatetime,
+  seo: { description },
+  coverImage: ogImage,
+  canonicalUrl,
+  publishedAt,
+  updatedAt,
   tags,
-} = post.data;
+  content,
+} = post;
 
-const { Content } = await post.render();
-
-const ogImageUrl = typeof ogImage === "string" ? ogImage : ogImage?.src;
+const ogImageUrl = ogImage?.url;
 const ogUrl = new URL(
-  ogImageUrl ?? `/posts/${slugifyStr(title)}.png`,
-  Astro.url.origin
+  ogImageUrl
 ).href;
+
+console.log('post', ogUrl);
 
 const layoutProps = {
   title: `${title} | ${SITE.title}`,
   author,
   description,
-  pubDatetime,
-  modDatetime,
-  canonicalURL,
+  pubDateTime: publishedAt,
+  modDatetime: updatedAt,
+  canonicalUrl,
   ogImage: ogUrl,
   scrollSmooth: true,
 };
@@ -62,15 +62,16 @@ const layoutProps = {
     </button>
   </div>
   <main id="main-content">
+    <img src={ogUrl} alt={post.title} />
     <h1 transition:name={slugifyStr(title)} class="post-title">{title}</h1>
     <Datetime
-      pubDatetime={pubDatetime}
-      modDatetime={modDatetime}
+      pubDatetime={publishedAt}
+      modDatetime={updatedAt}
       size="lg"
       className="my-2"
     />
     <article id="article" class="prose mx-auto mt-8 max-w-3xl">
-      <Content />
+      <Fragment set:html={content.html}></Fragment>
     </article>
 
     <ul class="my-8">

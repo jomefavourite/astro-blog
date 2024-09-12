@@ -1,10 +1,11 @@
 ---
-import { getCollection } from "astro:content";
 import Posts from "@layouts/Posts.astro";
 import getSortedPosts from "@utils/getSortedPosts";
 import getPagination from "@utils/getPagination";
+import {getAllPosts} from "lib/clients";
 
-const posts = await getCollection("blog");
+const data = await getAllPosts();
+const posts = data.publication.posts.edges.map(post => post.node);
 
 const sortedPosts = getSortedPosts(posts);
 

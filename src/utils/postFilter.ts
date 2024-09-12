@@ -1,10 +1,10 @@
 import { SITE } from "@config";
-import type { CollectionEntry } from "astro:content";
+import type { Post } from "lib/schema";
 
-const postFilter = ({ data }: CollectionEntry<"blog">) => {
+const postFilter = (data: Post) => {
   const isPublishTimePassed =
     Date.now() >
-    new Date(data.pubDatetime).getTime() - SITE.scheduledPostMargin;
+    new Date(data.publishedAt).getTime() - SITE.scheduledPostMargin;
   return !data.draft && (import.meta.env.DEV || isPublishTimePassed);
 };
 
