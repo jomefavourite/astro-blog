@@ -108,13 +108,16 @@
 
   /* my fix for the highlight, might not be needed */
   html[data-theme="light"] pre:has(code) :not(span) {
-    color: rgb(238, 243, 255);
+    @apply text-skin-inverted;
+  }
+
+  html[data-theme="dark"] pre:has(code) :not(span) {
+    @apply text-skin-base;
   }
 
   /* Apply Dark Theme (if multi-theme specified) */
   html[data-theme="dark"] pre:has(code),
   html[data-theme="dark"] pre:has(code) span {
-    color: var(--shiki-dark) !important;
     background-color: var(--shiki-dark-bg) !important;
     font-style: var(--shiki-dark-font-style) !important;
     font-weight: var(--shiki-dark-font-weight) !important;
