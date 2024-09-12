@@ -1,12 +1,12 @@
 import Fuse from "fuse.js";
 import { useEffect, useRef, useState, useMemo, type FormEvent } from "react";
 import Card from "@components/Card";
-import type { CollectionEntry } from "astro:content";
+import type { Post } from "lib/schema";
 
 export type SearchItem = {
   title: string;
   description: string;
-  data: CollectionEntry<"blog">["data"];
+  data: Post;
   slug: string;
 };
 
@@ -30,6 +30,8 @@ export default function SearchBar({ searchList }: Props) {
     setInputVal(e.currentTarget.value);
   };
 
+  console.log("searchList", searchList[0]);
+
   const fuse = useMemo(
     () =>
       new Fuse(searchList, {
@@ -50,6 +52,8 @@ export default function SearchBar({ searchList }: Props) {
 
     // put focus cursor at the end of the string
     setTimeout(function () {
+      if (inputRef.current === null) return;
+
       inputRef.current!.selectionStart = inputRef.current!.selectionEnd =
         searchStr?.length || 0;
     }, 50);
@@ -108,11 +112,7 @@ export default function SearchBar({ searchList }: Props) {
       <ul>
         {searchResults &&
           searchResults.map(({ item, refIndex }) => (
-            <Card
-              href={`/posts/${item.slug}/`}
-              frontmatter={item.data}
-              key={`${refIndex}-${item.slug}`}
-            />
+            <Card post={item.data} key={`${refIndex}-${item.slug}`} />
           ))}
       </ul>
     </>
