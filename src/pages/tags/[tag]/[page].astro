@@ -8,9 +8,9 @@ import {fetchAllPosts} from "lib/clients";
 import type {Post} from "lib/schema";
 
 export interface Props {
-  post: Post;
   tag: string;
   tagName: string;
+  tagPosts: Post[];
 }
 
 export async function getStaticPaths() {
@@ -24,20 +24,16 @@ export async function getStaticPaths() {
 
     return totalPages.map(page => ({
       params: { tag, page },
-      props: { tag, tagName },
+      props: { tag, tagName, tagPosts },
     }));
   });
 }
 
 const { page } = Astro.params;
-const { tag, tagName } = Astro.props;
-
-const posts = await fetchAllPosts();
-
-const postsByTag = getPostsByTag(posts, tag);
+const { tag, tagName, tagPosts } = Astro.props;
 
 const pagination = getPagination({
-  posts: postsByTag,
+  posts: tagPosts,
   page,
 });
 ---
