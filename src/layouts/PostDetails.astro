@@ -33,9 +33,11 @@ const {
   updatedAt,
   tags,
   content,
+  slug
 } = post;
 
-const ogImageUrl = ogImage?.url;
+const ogImageUrl = ogImage?.url ?? `${SITE.website}posts/${slug}.png`;
+
 const ogUrl = new URL(
   ogImageUrl
 ).href;
@@ -68,8 +70,8 @@ const layoutProps = {
     </button>
   </div>
   <main id="main-content">
-    <img src={ogUrl} alt={post.title} />
-    <h1 transition:name={slugifyStr(title)} class="post-title">{title}</h1>
+    <img src={ogUrl} alt={title} />
+    <h1 transition:name={post.slug} class="post-title">{title}</h1>
     <Datetime
       pubDatetime={publishedAt}
       modDatetime={updatedAt}
@@ -81,7 +83,7 @@ const layoutProps = {
     </article>
 
     <ul class="my-8">
-      {tags.map(tag => <Tag tag={slugifyStr(tag)} />)}
+      {tags.map(tag => <Tag tag={tag.slug} />)}
     </ul>
 
     <div

@@ -153,6 +153,7 @@ export const getPost = async (slug: string) => {
             title
             subtitle
             readTimeInMinutes
+            slug
             content{
               html
               markdown
