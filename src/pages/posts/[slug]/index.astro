@@ -1,6 +1,5 @@
 ---
 import Posts from "@layouts/Posts.astro";
-import PostDetails from "@layouts/PostDetails.astro";
 import getSortedPosts from "@utils/getSortedPosts";
 import getPageNumbers from "@utils/getPageNumbers";
 import getPagination from "@utils/getPagination";
@@ -8,29 +7,23 @@ import { fetchAllPosts } from "lib/clients";
 import type { PageInfo , Post} from "lib/schema";
 
 export interface Props {
-  post: Post;
+  posts: Post[];
   pageInfo: PageInfo;
 }
 
 export async function getStaticPaths() {
   const posts = await fetchAllPosts();
 
-  const postResult = posts.map(post => ({
-    params: { slug: post.slug },
-    props: { post },
-  }));
-
   const pagePaths = getPageNumbers(posts.length).map(pageNum => ({
     params: { slug: String(pageNum) },
+    props: { posts }
   }));
 
-  return [...postResult, ...pagePaths];
+  return [...pagePaths];
 }
 
 const { slug } = Astro.params;
-const { post } = Astro.props;
-
-const posts = await fetchAllPosts();
+const { posts } = Astro.props;
 
 const sortedPosts = getSortedPosts(posts);
 
@@ -40,4 +33,4 @@ const pagination = getPagination({
 });
 ---
 
-{post ? <PostDetails post={post} /> : <Posts {...pagination} />}
+<Posts {...pagination} />
