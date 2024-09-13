@@ -7,7 +7,6 @@ interface Tag {
 }
 
 const getUniqueTags = (posts: Post[]) => {
-  console.log("tags", posts[0]);
   const tags: Tag[] = posts
     .filter(postFilter)
     .flatMap(post => post.tags)

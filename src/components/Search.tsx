@@ -30,8 +30,6 @@ export default function SearchBar({ searchList }: Props) {
     setInputVal(e.currentTarget.value);
   };
 
-  console.log("searchList", searchList[0]);
-
   const fuse = useMemo(
     () =>
       new Fuse(searchList, {
