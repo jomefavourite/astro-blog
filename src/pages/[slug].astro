@@ -1,9 +1,6 @@
 ---
-import Posts from "@layouts/Posts.astro";
 import PostDetails from "@layouts/PostDetails.astro";
-import getPageNumbers from "@utils/getPageNumbers";
-import getPagination from "@utils/getPagination";
-import {getAllPosts} from "lib/clients";
+import {fetchAllPosts, getPost} from "lib/clients";
 import type {Post} from "lib/schema";
 
 export interface Props {
@@ -11,30 +8,15 @@ export interface Props {
 }
 
 export async function getStaticPaths() {
-  const data = await getAllPosts();
-  const posts = data.publication.posts.edges.map(post => post.node);
-  const postResult = posts.map(post => ({
-    params: { slug: post.slug },
-    props: { post: post },
-  }));
-
-  const pagePaths = getPageNumbers(posts.length).map(pageNum => ({
-    params: { slug: String(pageNum) },
-  }));
-
-  return [...postResult, ...pagePaths];
+  const posts = await fetchAllPosts();
+  return posts.map((post: Post) => {
+    return {
+      params: { slug: post.slug },
+    };
+  });
 }
-
 const { slug } = Astro.params;
-const { post } = Astro.props;
-
-const data = await getAllPosts();
-const posts = data.publication.posts.edges.map(post => post.node);
-
-const pagination = getPagination({
-  posts,
-  page: slug,
-});
+const post = await getPost(slug);
 ---
 
-{post ? <PostDetails post={post} /> : <Posts {...pagination} />}
+<PostDetails post={post} />

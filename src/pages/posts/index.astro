@@ -2,10 +2,9 @@
 import Posts from "@layouts/Posts.astro";
 import getSortedPosts from "@utils/getSortedPosts";
 import getPagination from "@utils/getPagination";
-import {getAllPosts} from "lib/clients";
+import {fetchAllPosts} from "lib/clients";
 
-const data = await getAllPosts();
-const posts = data.publication.posts.edges.map(post => post.node);
+const posts = await fetchAllPosts();
 
 const sortedPosts = getSortedPosts(posts);
 

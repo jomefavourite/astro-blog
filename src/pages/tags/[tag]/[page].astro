@@ -4,7 +4,7 @@ import getUniqueTags from "@utils/getUniqueTags";
 import getPostsByTag from "@utils/getPostsByTag";
 import getPageNumbers from "@utils/getPageNumbers";
 import getPagination from "@utils/getPagination";
-import {getAllPosts} from "lib/clients";
+import {fetchAllPosts} from "lib/clients";
 import type {Post} from "lib/schema";
 
 export interface Props {
@@ -14,8 +14,7 @@ export interface Props {
 }
 
 export async function getStaticPaths() {
-  const data = await getAllPosts();
-  const posts = data.publication.posts.edges.map(post => post.node);
+  const posts = await fetchAllPosts();
 
   const tags = getUniqueTags(posts);
 
@@ -33,8 +32,7 @@ export async function getStaticPaths() {
 const { page } = Astro.params;
 const { tag, tagName } = Astro.props;
 
-const data = await getAllPosts();
-const posts = data.publication.posts.edges.map(post => post.node);
+const posts = await fetchAllPosts();
 
 const postsByTag = getPostsByTag(posts, tag);
 

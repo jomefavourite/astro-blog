@@ -1,5 +1,5 @@
 import { gql, GraphQLClient } from "graphql-request";
-import type { AllPostsData, PostData } from "./schema";
+import type { AllPostsData, PostData, Post } from "./schema";
 
 export const getClient = () => {
   return new GraphQLClient("https://gql.hashnode.com");
@@ -7,7 +7,7 @@ export const getClient = () => {
 
 const myHashnodeURL = "akoskm.hashnode.dev";
 
-export const getAllPosts = async () => {
+const getPostsAtCursor = async (cursor = "") => {
   const client = getClient();
 
   const allPosts = await client.request<AllPostsData>(
@@ -15,7 +15,7 @@ export const getAllPosts = async () => {
       query allPosts {
         publication(host: "${myHashnodeURL}") {
           title
-          posts(first: 20) {
+          posts(first: 10, after: "${cursor}") {
             pageInfo{
               hasNextPage
               endCursor
@@ -48,6 +48,84 @@ export const getAllPosts = async () => {
                   description
                 }
               }
+            }
+            pageInfo {
+              endCursor
+              hasNextPage
+            }
+          }
+        }
+      }
+    `
+  );
+
+  return allPosts;
+};
+
+export const fetchAllPosts = async (): Promise<Post[]> => {
+  let cursor = "";
+  let hasNextPage = true;
+  const postList = [];
+
+  while (hasNextPage) {
+    const data = await getPostsAtCursor(cursor);
+
+    postList.push(
+      ...data.publication.posts.edges.map(({ node }: { node: Post }) => node)
+    );
+
+    cursor = data.publication.posts.pageInfo.endCursor;
+    hasNextPage = data.publication.posts.pageInfo.hasNextPage;
+  }
+
+  return postList;
+};
+
+export const getPreviewPosts = async (cursor = "") => {
+  const client = getClient();
+
+  const allPosts = await client.request<AllPostsData>(
+    gql`
+      query allPosts {
+        publication(host: "${myHashnodeURL}") {
+          title
+          posts(first: 3) {
+            pageInfo{
+              hasNextPage
+              endCursor
+            }
+            edges {
+              node {
+                author{
+                  name
+                  profilePicture
+                }
+                title
+                subtitle
+                brief
+                slug
+                canonicalUrl
+                coverImage {
+                  url
+                }
+                tags {
+                  name
+                  slug
+                }
+                publishedAt
+                updatedAt
+                readTimeInMinutes
+                content {
+                  html
+                }
+                seo {
+                  description
+                }
+              }
+            }
+            pageInfo {
+              endCursor
+              hasNextPage
             }
           }
         }
@@ -85,6 +163,9 @@ export const getPost = async (slug: string) => {
             }
             coverImage {
               url
+            }
+            seo {
+              description
             }
           }
         }

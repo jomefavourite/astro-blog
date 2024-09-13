@@ -26,22 +26,24 @@ export const PostSchema = z.object({
     url: z.string(),
   }),
   seo: z.object({
-    description: z.string()
-  })
+    description: z.string(),
+  }),
+});
+
+export const PageInfo = z.object({
+  hasNextPage: z.boolean(),
+  endCursor: z.string(),
 });
 
 export const AllPostsDataSchema = z.object({
   publication: z.object({
     title: z.string(),
     posts: z.object({
-      pageInfo: z.object({
-        hasNextPage: z.boolean(),
-        endCursor: z.string(),
-      }),
+      pageInfo: PageInfo,
       edges: z.array(
         z.object({
           node: PostSchema,
-        }),
+        })
       ),
     }),
   }),
@@ -54,6 +56,7 @@ export const PostDataSchema = z.object({
   }),
 });
 
+export type PageInfo = z.infer<typeof PageInfo>;
 export type Post = z.infer<typeof PostSchema>;
 export type AllPostsData = z.infer<typeof AllPostsDataSchema>;
 export type PostData = z.infer<typeof PostDataSchema>;

@@ -1,19 +1,19 @@
 ---
-import { type CollectionEntry } from "astro:content";
 import Posts from "@layouts/Posts.astro";
 import PostDetails from "@layouts/PostDetails.astro";
 import getSortedPosts from "@utils/getSortedPosts";
 import getPageNumbers from "@utils/getPageNumbers";
 import getPagination from "@utils/getPagination";
-import {getAllPosts} from "lib/clients";
+import { fetchAllPosts } from "lib/clients";
+import type { PageInfo , Post} from "lib/schema";
 
 export interface Props {
-  post: CollectionEntry<"blog">;
+  post: Post;
+  pageInfo: PageInfo;
 }
 
 export async function getStaticPaths() {
-  const data = await getAllPosts();
-  const posts = data.publication.posts.edges.map(post => post.node);
+  const posts = await fetchAllPosts();
 
   const postResult = posts.map(post => ({
     params: { slug: post.slug },
@@ -30,8 +30,7 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const { post } = Astro.props;
 
-const data = await getAllPosts();
-const posts = data.publication.posts.edges.map(post => post.node);
+const posts = await fetchAllPosts();
 
 const sortedPosts = getSortedPosts(posts);
 

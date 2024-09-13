@@ -7,10 +7,10 @@ import Hr from "@components/Hr.astro";
 import Card from "@components/Card";
 import Socials from "@components/Socials.astro";
 import { SITE, SOCIALS } from "@config";
-import {getAllPosts} from "lib/clients";
+import {getPreviewPosts} from "lib/clients";
 
-const data = await getAllPosts();
-const recentPosts = data.publication.posts.edges.slice(0, 3).map(({ node }) => node);
+const data = await getPreviewPosts();
+const recentPosts = data.publication.posts.edges.slice(0, SITE.postPerIndex).map(({ node }) => node);
 
 const socialCount = SOCIALS.filter(social => social.active).length;
 ---
