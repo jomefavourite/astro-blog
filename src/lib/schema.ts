@@ -4,6 +4,10 @@ export const TagSchema = z.object({
   name: z.string(),
   slug: z.string(),
 });
+export const SerieSchema = z.object({
+  name: z.string(),
+  slug: z.string(),
+});
 
 export const PostSchema = z.object({
   author: z.object({
@@ -22,6 +26,7 @@ export const PostSchema = z.object({
     html: z.string(),
   }),
   tags: z.array(TagSchema),
+  series: SerieSchema,
   coverImage: z.object({
     url: z.string(),
   }),
@@ -61,3 +66,4 @@ export type Post = z.infer<typeof PostSchema>;
 export type AllPostsData = z.infer<typeof AllPostsDataSchema>;
 export type PostData = z.infer<typeof PostDataSchema>;
 export type Tag = z.infer<typeof TagSchema>;
+export type Serie = z.infer<typeof SerieSchema>;

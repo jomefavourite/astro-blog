@@ -1,0 +1,46 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Main from "@layouts/Main.astro";
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
+import Card from "@components/Card";
+import Pagination from "@components/Pagination.astro";
+import { SITE } from "@config";
+import type { Post } from "lib/schema";
+
+export interface Props {
+  currentPage: number;
+  totalPages: number;
+  paginatedPosts: Post[];
+  serie: string;
+  serieName: string;
+}
+
+const { currentPage, totalPages, paginatedPosts, serie, serieName } =
+  Astro.props;
+---
+
+<Layout title={`Series: ${serieName} | ${SITE.title}`}>
+  <Header activeNav="series" />
+  <Main
+    pageTitle={[`Series:`, `${serieName}`]}
+    titleTransition={serie}
+    pageDesc={`All the articles within the series "${serieName}".`}
+  >
+    <h1 slot="title" transition:name={serie}>{`Serie:${serie}`}</h1>
+    <ul>
+      {paginatedPosts.map(post => <Card post={post} />)}
+    </ul>
+  </Main>
+
+  <Pagination
+    {currentPage}
+    {totalPages}
+    prevUrl={`/series/${serie}${
+      currentPage - 1 !== 1 ? "/" + (currentPage - 1) : ""
+    }/`}
+    nextUrl={`/series/${serie}/${currentPage + 1}/`}
+  />
+
+  <Footer noMarginTop={totalPages > 1} />
+</Layout>

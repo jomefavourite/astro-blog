@@ -1,0 +1,41 @@
+---
+import SeriePosts from "@layouts/SeriePosts.astro";
+import getUniqueSeries from "@utils/getUniqueSeries";
+import getPostsBySerieSlug from "@utils/getPostsBySerieSlug";
+import getPageNumbers from "@utils/getPageNumbers";
+import getPagination from "@utils/getPagination";
+import { fetchAllPosts } from "lib/clients";
+import type { Post } from "lib/schema";
+
+export interface Props {
+  serie: string;
+  serieName: string;
+  seriePosts: Post[];
+}
+
+export async function getStaticPaths() {
+  const posts = await fetchAllPosts();
+
+  const series = getUniqueSeries(posts);
+
+  return series.flatMap(({ slug, name }) => {
+    const seriePosts = getPostsBySerieSlug(posts, slug);
+    const totalPages = getPageNumbers(seriePosts.length);
+
+    return totalPages.map(page => ({
+      params: { serie: slug, page },
+      props: { serie: slug, serieName: name, seriePosts },
+    }));
+  });
+}
+
+const { page } = Astro.params;
+const { serie, serieName, seriePosts } = Astro.props;
+
+const pagination = getPagination({
+  posts: seriePosts,
+  page,
+});
+---
+
+<SeriePosts {...pagination} {serie} {serieName} />

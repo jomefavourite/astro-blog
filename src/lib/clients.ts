@@ -38,6 +38,10 @@ const getPostsAtCursor = async (cursor = "") => {
                   name
                   slug
                 }
+                series {
+                  name
+                  slug
+                }
                 publishedAt
                 updatedAt
                 readTimeInMinutes
@@ -112,6 +116,10 @@ export const getPreviewPosts = async (cursor = "") => {
                   name
                   slug
                 }
+                series {
+                  name
+                  slug
+                }
                 publishedAt
                 updatedAt
                 readTimeInMinutes
@@ -159,6 +167,10 @@ export const getPost = async (slug: string) => {
               markdown
             }
             tags {
+              name
+              slug
+            }
+            series {
               name
               slug
             }
