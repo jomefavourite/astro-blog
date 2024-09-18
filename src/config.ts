@@ -28,8 +28,8 @@ export const LOGO_IMAGE = {
 export const SOCIALS: SocialObjects = [
   {
     name: "Twitter",
-    href: "https://github.com/satnaing/astro-paper",
-    linkTitle: `${SITE.title} on Twitter`,
+    href: "https://x.com/intent/follow?screen_name=akoskm",
+    linkTitle: `${SITE.title} on X`,
     active: true,
   },
   {
