@@ -13,18 +13,14 @@ const formatTime = (time: number) => {
 
 const Countdown = () => {
   const [time, setTime] = useState(formatTime(timeLeft));
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(false);
     const interval = setInterval(() => {
       timeLeft = PROMOTION_END - Date.now();
       setTime(formatTime(timeLeft));
     }, 1000);
     return () => clearInterval(interval);
   }, []);
-
-  if (isLoading) return "Loading promotion...";
 
   return <span id="countdown">Time left: {time}</span>;
 };
