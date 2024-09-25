@@ -12,7 +12,7 @@ const formatTime = (time: number) => {
 };
 
 const Countdown = () => {
-  const [time, setTime] = useState(formatTime(timeLeft));
+  const [time, setTime] = useState(() => formatTime(timeLeft));
 
   useEffect(() => {
     const interval = setInterval(() => {
