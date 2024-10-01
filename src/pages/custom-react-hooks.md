@@ -1,5 +1,5 @@
 ---
-layout: ../layouts/AboutLayout.astro
+layout: ../layouts/ProjectsLayout.astro
 title: "Mastering Custom React Hooks: Examples and Best Practices"
 ---
 

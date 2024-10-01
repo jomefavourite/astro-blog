@@ -1,5 +1,5 @@
 ---
-layout: ../layouts/AboutLayout.astro
+layout: ../layouts/ProjectsLayout.astro
 title: "Generative AI with React JS: Build and Deploy Powerful AI Apps"
 ---
 

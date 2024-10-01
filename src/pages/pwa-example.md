@@ -1,5 +1,5 @@
 ---
-layout: ../layouts/AboutLayout.astro
+layout: ../layouts/ProjectsLayout.astro
 title: "Progressive Web App Example: Building Modern PWAs with React"
 ---
 
