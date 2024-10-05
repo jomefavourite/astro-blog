@@ -9,6 +9,7 @@ const myHashnodeURL = "blog.favouritejome.online";
 
 const getPostsAtCursor = async (cursor = "") => {
   const client = getClient();
+  
 
   const allPosts = await client.request<AllPostsData>(
     gql`
